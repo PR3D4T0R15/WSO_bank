@@ -1,0 +1,6 @@
+## MongoDB data ##
+{
+    "dane": {"imie": "Jan","nazwisko": "Nowak"},
+    "auth": {"nrKarty":6549461565, "pin":15649},
+    "stanKonta": 145.65
+}
