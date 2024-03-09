@@ -13,18 +13,30 @@ class DataUpdate:
     def __del__(self):
         self.dbConn.close()
 
+    # check if pin for given cardId is valid
     def checkId(self, cardId, pin):
         query = self.collection.find_one({"auth.cardId": cardId})
+        if query is None:
+            return False
+
         if query['auth']['pin'] == pin:
             return True
         else:
             return False
 
-    def getInfo(self, cardId):
+    # return client name and current client balance
+    def getAccountInfo(self, cardId):
         query = self.collection.find_one({"auth.cardId": cardId})
         data = {'client': query['client'], 'balance': query['balance']}
         return data
 
+    # return client balance
+    def getAccountBalance(self, cardId):
+        query = self.collection.find_one({"auth.cardId": cardId})
+        data = {'balance': query['balance']}
+        return data
+
+    # update balance by given value
     def updateBalance(self, cardId, value):
         query = self.collection.find_one({"auth.cardId": cardId})
 
