@@ -5,7 +5,7 @@ app = FastAPI()
 
 @app.get("/bank")
 async def get_info(request: Request):
-
+    pass
 
 
 @app.put("/bank")
