@@ -1,13 +1,13 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 
 app = FastAPI()
 
 
 @app.get("/bank")
-async def get_info():
+async def get_info(request: Request):
     pass
 
 
-@app.post("/bank")
-async def update_bank():
+@app.put("/bank")
+async def update_bank(request: Request):
     pass
