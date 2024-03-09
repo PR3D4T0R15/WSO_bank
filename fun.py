@@ -14,11 +14,21 @@ class DataUpdate:
         self.dbConn.close()
 
     def checkId(self, cardId, pin):
-        for x in self.collection.find({"auth.cardId": cardId}):
-            if x['auth']['pin'] == pin:
-                return True
-            else:
-                return False
+        query = self.collection.find_one({"auth.cardId": cardId})
+        if query['auth']['pin'] == pin:
+            return True
+        else:
+            return False
 
-    def updateBalance(self, balance):
-        pass
+    def getInfo(self, cardId):
+        query = self.collection.find_one({"auth.cardId": cardId})
+        data = {'client': query['client'], 'balance': query['balance']}
+        return data
+
+    def updateBalance(self, cardId, value):
+        query = self.collection.find_one({"auth.cardId": cardId})
+
+        money = query['balance']
+        money = money + value
+
+        self.collection.update_one({"auth.cardId": cardId}, {"$set": {"balance": money}})
