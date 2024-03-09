@@ -1,4 +1,4 @@
-from pymongo import MongoClient
+from pymongo import MongoClient, errors
 
 
 class DataUpdate:
@@ -14,6 +14,8 @@ class DataUpdate:
         self.dbConn.close()
 
     # check if pin for given cardId is valid
+    # cardId - int value
+    # pin - int value
     def checkId(self, cardId, pin):
         query = self.collection.find_one({"auth.cardId": cardId})
         if query is None:
@@ -25,20 +27,30 @@ class DataUpdate:
             return False
 
     # return client name and current client balance
+    # cardId - int value
     def getAccountInfo(self, cardId):
         query = self.collection.find_one({"auth.cardId": cardId})
+        if query is None:
+            return {"error": "Not Found"}
         data = {'client': query['client'], 'balance': query['balance']}
         return data
 
     # return client balance
+    # cardId - int value
     def getAccountBalance(self, cardId):
         query = self.collection.find_one({"auth.cardId": cardId})
+        if query is None:
+            return {"error": "Not Found"}
         data = {'balance': query['balance']}
         return data
 
     # update balance by given value
+    # cardId - int value
+    # value - int/double value
     def updateBalance(self, cardId, value):
         query = self.collection.find_one({"auth.cardId": cardId})
+        if query is None:
+            return {"error": "Not Found"}
 
         money = query['balance']
         money = money + value
