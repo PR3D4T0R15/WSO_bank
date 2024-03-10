@@ -1,6 +1,30 @@
 ## MongoDB data ##
 {
-    "dane": {"imie": "Jan","nazwisko": "Nowak"},
-    "auth": {"nrKarty":6549461565, "pin":15649},
-    "stanKonta": 145.65
+    "client": {"name": "Jan","lastName": "Nowak"},
+    "auth": {"cardId":6549461565, "pin":15649},
+    "balance": 145.65
+}
+
+
+## GET query ##
+{
+    "auth": {"cardId":6549461565, "pin":15649},
+}
+## GET response ##
+{
+    "client": {"name": "Jan","lastName": "Nowak"},
+    "balance": 145.65
+}
+
+
+## PUT query ##
+{
+    "type": "income",
+    "auth": {"cardId":6549461565},
+    "value": 100.0
+}
+## PUT response ##
+{
+    "success": True,
+    "balance": 100.0
 }
