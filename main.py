@@ -1,5 +1,6 @@
 from fastapi import FastAPI, Request, Response
 from fun import DataUpdate
+import json
 
 app = FastAPI()
 
@@ -9,7 +10,7 @@ async def get_info(request: Request):
     bankAuth = request.headers.get("Authorization")
 
     if bankAuth != "test":
-        return Response(str({"error": "bad machine"}), status_code=401, media_type="application/json")
+        return Response(json.dumps({"error": "bad machine"}), status_code=401, media_type="application/json")
 
     body = await request.json()
     cardId = body["auth"]["cardId"]
@@ -19,12 +20,12 @@ async def get_info(request: Request):
 
     if not database.checkId(cardId, pin):
         del database
-        return Response(str({"error": "bad pin or card"}), status_code=401, media_type="application/json")
+        return Response(json.dumps({"error": "bad pin or card"}), status_code=401, media_type="application/json")
 
     response_body = database.getAccountInfo(cardId)
 
     del database
-    return Response(str(response_body), status_code=200, media_type="application/json")
+    return Response(json.dumps(response_body), status_code=200, media_type="application/json")
 
 
 @app.put("/bank")
