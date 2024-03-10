@@ -32,18 +32,18 @@ class DataUpdate:
     def getAccountInfo(self, cardId):
         query = self.collection.find_one({"auth.cardId": cardId})
         if query is None:
-            return json.dumps({"success": False, "error": "Not Found"})
+            return {"success": False, "error": "Not Found"}
         data = {"success": True, "client": query["client"], "balance": query["balance"]}
-        return json.dumps(data)
+        return data
 
     # return client balance
     # cardId - int value
     def getAccountBalance(self, cardId):
         query = self.collection.find_one({"auth.cardId": cardId})
         if query is None:
-            return json.dumps({"success": False, "error": "Not Found"})
+            return {"success": False, "error": "Not Found"}
         data = {"success": True, "balance": query["balance"]}
-        return json.dumps(data)
+        return data
 
     # update balance by given value
     # cardId - int value
@@ -51,7 +51,7 @@ class DataUpdate:
     def updateBalance(self, cardId, value, opType):
         query = self.collection.find_one({"auth.cardId": cardId})
         if query is None:
-            return json.dumps({"success": False, "error": "Not Found"})
+            return {"success": False, "error": "Not Found"}
 
         money = query["balance"]
 
@@ -61,10 +61,10 @@ class DataUpdate:
             if money - value > 0:
                 money = money - value
             else:
-                return json.dumps({"success": False, "error": "low balance"})
+                return {"success": False, "error": "low balance"}
         else:
-            return json.dumps({"success": False, "error": "unknown operation"})
+            return {"success": False, "error": "unknown operation"}
 
         self.collection.update_one({"auth.cardId": cardId}, {"$set": {"balance": money}})
 
-        return json.dumps({"success": True, "error": "no"})
+        return {"success": True, "error": "no"}

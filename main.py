@@ -25,7 +25,7 @@ async def get_info(request: Request):
     response_body = database.getAccountInfo(cardId)
 
     del database
-    return Response(response_body, status_code=200, media_type="application/json")
+    return Response(json.dumps(response_body), status_code=200, media_type="application/json")
 
 
 @app.put("/bank")
@@ -42,6 +42,14 @@ async def update_bank(request: Request):
 
     database = DataUpdate()
 
-    database.updateBalance(cardId, value, opType)
+    query_update = database.updateBalance(cardId, value, opType)
+    query_balance = database.getAccountBalance(cardId)
 
-    return {"status": 200}
+    del database
+
+    if not query_update["success"]:
+        return Response(json.dumps(query_update), status_code=400, media_type="application/json")
+    else:
+        response_body = {"success": True, "balance": query_balance["balance"]}
+        return Response(json.dumps(response_body), status_code=200, media_type="application/json")
+

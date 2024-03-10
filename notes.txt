@@ -25,6 +25,6 @@
 }
 ## PUT response ##
 {
-    "status": "OK",
+    "success": True,
     "balance": 100.0
 }
