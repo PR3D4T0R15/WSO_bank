@@ -31,9 +31,17 @@ async def get_info(request: Request):
 @app.put("/bank")
 async def update_bank(request: Request):
     bankAuth = request.headers.get("Authorization")
-    body = await request.json()
 
-    print(body)
-    print(bankAuth)
+    if bankAuth != "test":
+        return Response(json.dumps({"error": "bad machine"}), status_code=401, media_type="application/json")
+
+    body = await request.json()
+    opType = body["type"]
+    cardId = body["auth"]["cardId"]
+    value = body["value"]
+
+    database = DataUpdate()
+
+    database.updateBalance(cardId, value, opType)
 
     return {"status": 200}

@@ -20,7 +20,8 @@
 ## PUT query ##
 {
     "type": "income",
-    "amount": 100.0
+    "auth": {"cardId":6549461565},
+    "value": 100.0
 }
 ## PUT response ##
 {
