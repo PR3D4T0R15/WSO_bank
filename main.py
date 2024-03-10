@@ -25,7 +25,7 @@ async def get_info(request: Request):
     response_body = database.getAccountInfo(cardId)
 
     del database
-    return Response(json.dumps(response_body), status_code=200, media_type="application/json")
+    return Response(response_body, status_code=200, media_type="application/json")
 
 
 @app.put("/bank")
