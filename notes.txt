@@ -1,3 +1,15 @@
+## END POINTS ##
+GET /ping - pong
+
+POST /login - logowanie do konta
+DELETE /login - wylogowanie z konta
+PUT /login - tworzenie konta
+
+GET /account - stan konta
+POST /account - zmiana srodkow  i zmiana pinu
+
+
+
 ## MongoDB data ##
 {
     "client": {"name": "Jan","lastName": "Nowak"},

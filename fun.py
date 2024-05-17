@@ -1,70 +1,52 @@
-from pymongo import MongoClient
+from configparser import ConfigParser
 import json
+import mysql.connector
+
+
+def checkAuthString(authStringFromDevice):
+    config = ConfigParser()
+    config.read('config.ini')
+    authStringSaved = config['Authorization']['authString']
+
+    if authStringFromDevice == authStringSaved:
+        return True
+    else:
+        return False
 
 
 class DataUpdate:
-    dbConn = 0
-    db = 0
+    connection = None
+    cursor = None
 
     def __init__(self):
-        self.dbConn = MongoClient('localhost', 27017, username='admin', password='AdmiN')
-        self.db = self.dbConn["WSO_bank"]
-        self.collection = self.db["clients"]
+        config = ConfigParser()
+        config.read('config.ini')
+        db_host = config['Database']['host']
+        db_user = config['Database']['user']
+        db_password = config['Database']['password']
+        db_database = config['Database']['database']
+
+        self.connection = mysql.connector.connect(host=db_host, user=db_user, passwd=db_password, database=db_database)
+        self.cursor = self.connection.cursor()
 
     def __del__(self):
-        self.dbConn.close()
+        del self.cursor
+        del self.connection
 
-    # check if pin for given cardId is valid
-    # cardId - int value
-    # pin - int value
-    def checkId(self, cardId, pin):
-        query = self.collection.find_one({"auth.cardId": cardId})
-        if query is None:
-            return False
+    def userLogin(self):
+        pass
 
-        if query["auth"]["pin"] == pin:
-            return True
-        else:
-            return False
+    def userLogout(self):
+        pass
 
-    # return client name and current client balance
-    # cardId - int value
-    def getAccountInfo(self, cardId):
-        query = self.collection.find_one({"auth.cardId": cardId})
-        if query is None:
-            return {"success": False, "error": "Not Found"}
-        data = {"success": True, "client": query["client"], "balance": query["balance"]}
-        return data
+    def userNew(self):
+        pass
 
-    # return client balance
-    # cardId - int value
-    def getAccountBalance(self, cardId):
-        query = self.collection.find_one({"auth.cardId": cardId})
-        if query is None:
-            return {"success": False, "error": "Not Found"}
-        data = {"success": True, "balance": query["balance"]}
-        return data
+    def accountBalance(self):
+        pass
 
-    # update balance by given value
-    # cardId - int value
-    # value - int/double value
-    def updateBalance(self, cardId, value, opType):
-        query = self.collection.find_one({"auth.cardId": cardId})
-        if query is None:
-            return {"success": False, "error": "Not Found"}
+    def accountUpdateBalance(self):
+        pass
 
-        money = query["balance"]
-
-        if opType == "in":
-            money = money + value
-        elif opType == "out":
-            if money - value > 0:
-                money = money - value
-            else:
-                return {"success": False, "error": "low balance"}
-        else:
-            return {"success": False, "error": "unknown operation"}
-
-        self.collection.update_one({"auth.cardId": cardId}, {"$set": {"balance": money}})
-
-        return {"success": True, "error": "no"}
+    def accountChangePin(self):
+        pass
